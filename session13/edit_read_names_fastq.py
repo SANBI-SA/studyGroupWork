@@ -18,14 +18,15 @@ def change_readnames(data):
 
   # add "\1" to the end of the read name lines
   count = 0
-  fastq_new = []
+  output_file = open('sequence_new.fq', 'w') # change 'sequence_new.fq' to the name you want for your new fastq file
   for line in f:
     if line.startswith("@"):
         changed_string = line + "\\1\n" # to add to reverse fastq change "\x01" to "\x02"
-        fastq_new.append(changed_string)
+        output_file.write(changed_string)
         count += 1
     else:
-        fastq_new.append(line)
+        output_file.write(line)
+  output_file.close()
 
     # re-add new line characters
     # final = []
@@ -34,9 +35,9 @@ def change_readnames(data):
     #     final.append(line)
 
     # write to file
-    f = open('sequence_new.fq', 'w') # change 'sequence_new.fq' to the name you want for your new fastq file
-    f.writelines(fastq_new)
-    f.close()
+    # output_file.writelines(fastq_new)
+    # output_file.close()
+  print(count, "reads in", data)
 
 if __name__ == '__main__':
       change_readnames()
