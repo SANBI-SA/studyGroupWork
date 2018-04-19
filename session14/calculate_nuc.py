@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from __future__ import print_function, division
-import sys
 import click
 from Bio import SeqIO
 
