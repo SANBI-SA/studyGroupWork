@@ -36,8 +36,8 @@ for file_name in os.listdir("."): #returns a list of files and folders. It takes
 				if length >= bin_lower and length < bin_upper: #cannot be = to upper_bin, because upper bin, starts new directory
 					print ("bin is " + str(bin_lower) + " to " + str(bin_upper)) # once we know the correct bin, write out the sequence
 					bin_folder_name = str(bin_lower) + "_" + str(bin_upper)
-					if not os.path.exists(output_path):
-						os.mkdir(output_path)
+					if not os.path.exists(bin_folder_name):
+						os.mkdir(bin_folder_name)
 					output_path = bin_folder_name + "/" + str(seq_number) + ".dna"
 					output = open(output_path, "w")
 					output.write(dna + '\n')
