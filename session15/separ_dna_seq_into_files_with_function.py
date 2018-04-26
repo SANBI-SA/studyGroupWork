@@ -9,14 +9,14 @@ import os
 import os.path
 
 def find_bin(seqlength):
-    for bin_lower in range(100, 1000, 100):  # creates bins that go from  100 - 1000, in increments of 100. These are the start num	
-      bin_upper = bin_lower + 99
-      if length >= bin_lower and length < bin_upper:
-        bin_folder_name = str(bin_lower) + "_" + str(bin_upper)
-        return bin_folder_name  # we've found the right bin, let's end the loop and return the name
-    else:  # this else belongs to the loop, not the if - it is run if we get to the end of the loop, see: http://book.pythontips.com/en/latest/for_-_else.html#else-clause
-        # "raise" raises an exception - the program will stop and this error message will be shown
-        raise ValueError("No appropriate bin was found for sequence of length {}".format(seqlength))
+  for bin_lower in range(100, 1000, 100):  # creates bins that go from  100 - 1000, in increments of 100. These are the start num	
+    bin_upper = bin_lower + 99
+    if length >= bin_lower and length < bin_upper:
+      bin_folder_name = str(bin_lower) + "_" + str(bin_upper)
+      return bin_folder_name  # we've found the right bin, let's end the loop and return the name
+  else:  # this else belongs to the loop, not the if - it is run if we get to the end of the loop, see: http://book.pythontips.com/en/latest/for_-_else.html#else-clause
+      # "raise" raises an exception - the program will stop and this error message will be shown
+      raise ValueError("No appropriate bin was found for sequence of length {}".format(seqlength))
 
 # create a variable to hold the sequence number
 seq_number = 1
