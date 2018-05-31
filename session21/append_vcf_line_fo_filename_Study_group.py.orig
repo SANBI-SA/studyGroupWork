@@ -12,9 +12,7 @@ import os
 import os.path
 import sys
 import glob
-# intervaltree from https://pypi.org/project/intervaltree/
-# installed into Anaconda using: conda install intervaltree
-import intervaltree
+
 ################################################
 # locate all the necessary files and open them
 ################################################
@@ -22,7 +20,7 @@ import intervaltree
 path_operon_file = "../data/vcf_operon_overlap/*.txt"
 operon_files = glob.glob(path_operon_file)
 path_variant_files = "../data/vcf_operon_overlap/TKK*"
-variant_files = glob.glob(path_variant_files)  # list all the files within the above directory
+variant_files = glob.glob(path_variant_files) #list all the files within the above directory
 
 #######################################################################################################################################################################################################################################################################################
 # Put the vcf file data into list of lists
@@ -33,19 +31,14 @@ variant_files = glob.glob(path_variant_files)  # list all the files within the a
 
 # create empty lists for all the lists I will use
 # creating them outside the loop also makes them available outside the loop
-vcf_list = []
+operon_data, vcf_list = [], []
 # read in operon data
-operon_tree = intervaltree.IntervalTree()
 for file_names in operon_files:
     open_operon_file = open(file_names)
     next(open_operon_file)  # skip header line
     for operon_line in open_operon_file:
         operon_fields = operon_line.strip().split('\t')
-        operon_bin_start = int(operon_fields[1])
-        operon_bin_end = int(operon_fields[2])
-        # insert some data into the interval tree at this position
-        operon_tree[operon_bin_start:operon_bin_end] = operon_fields
-        # operon_data.append(operon_fields)
+        operon_data.append(operon_fields)
         # print(operon_data)
 
 for path in variant_files:
@@ -73,18 +66,16 @@ for path in variant_files:
     out_file = open(output_file_name, "w")
     for record in vcf_list:
         mut_position = int(record[1])
-        # return is a set of Interval objects that overlaps this position
-        # each Interval object has members start, end, data: data is the thing
-        #   you insert when creating the interval tree
-        operon_list = operon_tree[mut_position:mut_position + 1]  # must make at least width 1 for search
-        # some notes on VCF positions and "size": https://pyvcf.readthedocs.io/en/latest/API.html#vcf-model-record
-        assert len(operon_list) < 2, "position {} overlapped with multiple operons: {}".format(mut_position, operon_list)
-        if len(operon_list) > 0:
+        for data in operon_data:
+            operon_bin_start = int(data[1])
+            operon_bin_end = int(data[2])
+            if (mut_position >= operon_bin_start and mut_position <= operon_bin_end) or (mut_position == operon_bin_start) or (mut_position == operon_bin_end):
+                # print(mut_position, operon_bin_start, operon_bin_end, file_name)
+                # print(column[0:3], data[0:3], file_name)
+
                 output_record = [file_name, record[1]]
                 output_record.extend(record[3:])
-                # turn the set into a list, take the first element,
-                # and take its .data attribute
-                output_record.extend(list(operon_list)[0].data)
+                output_record.extend(data)
                 out_line = "\t".join(output_record) + "\n"
                 out_file.write(out_line)
     out_file.close()
