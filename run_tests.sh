@@ -21,6 +21,6 @@ do
     then
         name=$(basename $path)
         echo "Testing $name"
-        ( cd $path ; source activate $name; $PYTHON -mpytest )
+        ( cd $path ; if [ -d requirements.txt ] ; then source activate $name ; fi ; $PYTHON -mpytest )
     fi
 done

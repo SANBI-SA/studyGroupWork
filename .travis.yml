@@ -22,7 +22,7 @@ install:
   - conda config --get channels
   - conda config --add channels conda-forge
   - conda config --add channels bioconda
-  - conda install -y conda-build
+  - conda install -y conda-build pytest
   - bash setup_test_environment.sh
 
 script:
